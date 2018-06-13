@@ -30,4 +30,23 @@ class Products
 
         return $productEntity;
     }
+
+    /**
+     * @param string $from
+     * @param string $to
+     * @return array
+     */
+    public function getList(string $from, string $to): array
+    {
+        $qb = $this->getDoctrine()->getEntityManager()->createQueryBuilder('AppBundle:Products p')
+            ->where('createdAt >= :from')
+            ->andWhere('createdAt <= :to')
+            ->setParameter('from', $from)
+            ->setParameter('to', $to)
+            ->getQuery()
+        ;
+
+        return $qb->execute() ?? [];
+
+    }
 }

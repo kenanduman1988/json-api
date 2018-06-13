@@ -3,6 +3,7 @@
 namespace AppBundle\Service;
 
 use Aws\S3\S3Client;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class AmazonS3Service
@@ -100,5 +101,43 @@ class AmazonS3Service
     {
         $this->bucket = $bucket;
         return $this;
+    }
+
+    /**
+     * @param string $from
+     * @param string $to
+     * @param array $list
+     * @return string|null
+     */
+    public function getUrl(string $from, string $to, array $list): ?string
+    {
+        $fileSystem = new Filesystem();
+        $tmpFile = '/tmp/s3.csv';
+        $handle = fopen($tmpFile, 'w+');
+        // insert header
+        fputcsv($handle, [
+            'sku',
+            'name',
+            'price_eur',
+            'created_at',
+        ], ';');
+        foreach ($list as $item) {
+            // insert rows
+            fputcsv($handle, [
+                $item['sku'],
+                $item['name'],
+                $item['price'],
+                $item['created_at'],
+            ], ';');
+        }
+        fclose($handle);
+
+        $url =  $this->uploadFile(
+            $tmpFile,
+            sprintf( 'products_%s_%s', $from, $to)
+        );
+        $fileSystem->remove($tmpFile);
+
+        return $url ?? null;
     }
 }

@@ -53,52 +53,19 @@ class ProductController extends Controller
      * @param Request $request
      * @return string
      */
-    public function getList(Request $request): string
+    public function listAction(Request $request): string
     {
-        $fileSystem = new Filesystem();
-        /** @var string $from */
         $from = $request->get('from', null);
-        /** @var string $to */
         $to = $request->get('to', null);
-        if ($from && $to) {
-            $qb = $this->getDoctrine()->getEntityManager()->createQueryBuilder('AppBundle:Products p')
-                ->where('createdAt >= :from')
-                ->andWhere('createdAt <= :to')
-                ->setParameter('from', $from)
-                ->setParameter('to', $to)
-                ->getQuery()
-            ;
-            $list = $qb->execute();
-            $tmpFile = '/tmp/s3.csv';
-            $handle = fopen($tmpFile, 'w+');
-            // insert header
-            fputcsv($handle, [
-                'sku',
-                'name',
-                'price_eur',
-                'created_at',
-            ], ';');
-            foreach ($list as $item) {
-                // insert rows
-                fputcsv($handle, [
-                    $item['sku'],
-                    $item['name'],
-                    $item['price'],
-                    $item['created_at'],
-                ], ';');
-            }
-            fclose($handle);
-            $s3Url = $this->getAmazonS3Service()->uploadFile(
-                $tmpFile,
-                sprintf( 'products_%s_%s', $from, $to)
-            );
-            $fileSystem->remove($tmpFile);
-            if ($s3Url) {
-
-                return new JsonResponse($s3Url);
-            }
+        if (null === $from || null === $to) {
+            return new Response('Not enough parameter', 406);
         }
 
-        return new Response('Error', 500);
+        return new JsonResponse($this->getAmazonS3Service()->getUrl(
+                $from,
+                $to,
+                $this->getProductsService()->getList($from, $to)
+            ));
+
     }
 }
