@@ -46,9 +46,9 @@ services:
         class: AppBundle\Service\Prices
         arguments: ["@service_container"]
 
-    s3_storage:
+    amazons3:
         public: true
-        class: AppBundle\Service\AmazonS3Service
+        class: AppBundle\Service\AmazonS3
         arguments:
             $bucket : "kenanduman"
             $s3arguments:

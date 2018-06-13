@@ -2,7 +2,7 @@
 
 namespace AppBundle\Traits;
 
-use AppBundle\Service\AmazonS3Service;
+use AppBundle\Service\AmazonS3;
 use AppBundle\Service\ExchangeRates;
 use AppBundle\Service\Prices;
 use AppBundle\Service\Products;
@@ -47,10 +47,10 @@ trait ServiceTrait
     }
 
     /**
-     * @return AmazonS3Service
+     * @return AmazonS3
      */
     public function getAmazonS3Service()
     {
-        return $this->container->get('s3_storage');
+        return $this->container->get('amazons3');
     }
 }

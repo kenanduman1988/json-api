@@ -6,10 +6,10 @@ use Aws\S3\S3Client;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Class AmazonS3Service
+ * Class AmazonS3
  * @package AppBundle\Service
  */
-class AmazonS3Service
+class AmazonS3
 {
     /**
      * @var S3Client
