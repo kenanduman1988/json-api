@@ -1,5 +1,4 @@
 version: '2'
-
 services:
     db:
         image: mysql
@@ -21,6 +20,7 @@ services:
         volumes:
             - ./app:/var/www/symfony
             - ./logs/symfony:/var/www/symfony/app/logs
+            - ./php7-fpm/php.ini:/usr/local/etc/php/conf.d/php.ini
     nginx:
         container_name: jsonapi-nginx
         build: nginx
