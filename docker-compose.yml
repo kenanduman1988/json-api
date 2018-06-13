@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+    db:
+        image: mysql
+        container_name: jsonapi-mysql
+        volumes:
+            - "./data/db:/var/lib/mysql"
+        ports:
+            - 3306:3306
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+    php:
+        container_name: jsonapi-php
+        build:
+            context: php7-fpm
+            args:
+                TIMEZONE: ${TIMEZONE}
+        volumes:
+            - ${SYMFONY_APP_PATH}:/var/www/symfony
+            - ./logs/symfony:/var/www/symfony/app/logs
+    nginx:
+        container_name: jsonapi-nginx
+        build: nginx
+        ports:
+            - 88:80
+        volumes_from:
+            - php
+        volumes:
+            - ./logs/nginx/:/var/log/nginx
