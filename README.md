@@ -16,11 +16,7 @@ docker-compose up -d
 ### PHP container login
 ```
 ./php.sh
-```
-
-### Mysql container login
-```
-./mysql.sh
+chown -R www-data:www-data .
 ```
 
 ### Install symfony
