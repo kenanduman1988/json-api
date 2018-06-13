@@ -33,3 +33,27 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+
+    products:
+        class: AppBundle\Service\Products
+        arguments: ["@service_container"]
+
+    exchange_rates:
+        class: AppBundle\Service\ExchangeRates
+        arguments: ["@service_container"]
+
+    prices:
+        class: AppBundle\Service\Prices
+        arguments: ["@service_container"]
+
+    s3_storage:
+        public: true
+        class: AppBundle\Service\AmazonS3Service
+        arguments:
+            $bucket : "kenanduman"
+            $s3arguments:
+                credentials:
+                    key: "%amazon_key%"
+                    secret: "%amazon_secret%"
+                region: "us-east-1"
+                version: "2006-03-01"
