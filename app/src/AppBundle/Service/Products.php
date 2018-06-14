@@ -23,7 +23,7 @@ class Products
         $productEntity
             ->setName($name)
             ->setSku($sku)
-            ->setCreatedAt(date('Y-m-d'))
+            ->setCreatedAt(new \DateTime())
         ;
         $this->getDoctrine()->getManager()->persist($productEntity);
         $this->getDoctrine()->getManager()->flush();
@@ -34,19 +34,20 @@ class Products
     /**
      * @param string $from
      * @param string $to
-     * @return array
+     * @return \AppBundle\Entity\Products[]
      */
     public function getList(string $from, string $to): array
     {
-        $qb = $this->getDoctrine()->getEntityManager()->createQueryBuilder('AppBundle:Products p')
-            ->where('createdAt >= :from')
-            ->andWhere('createdAt <= :to')
+        $qb = $this->getDoctrine()->getEntityManager()->createQuery("
+            SELECT p 
+              FROM AppBundle:Products p
+              WHERE p.createdAt BETWEEN :from AND :to
+        ")
             ->setParameter('from', $from)
             ->setParameter('to', $to)
-            ->getQuery()
         ;
 
-        return $qb->execute() ?? [];
+        return $qb->getResult() ?? [];
 
     }
 }

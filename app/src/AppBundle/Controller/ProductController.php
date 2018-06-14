@@ -30,22 +30,16 @@ class ProductController extends Controller
      */
     public function createAction(Request $request)
     {
-        $sku = $request->get('sku', null);
-        $name = $request->get('name', null);
-        $price = $request->get('price', null);
-        if ($sku && $name && $price) {
-            $productEntity = $this->getProductsService()->createProduct($sku, $name);
-            $value = $this->getExchangeRatesService()->getValue($price['price'], $price['currency']);
-            $priceEntity = $this->getPricesService()->createPrice($productEntity, $price['currency'], $value);
+        $data = json_decode($request->getContent(), true);
+        if (empty($data['sku']) && empty($data['name']) && empty($data['price'])) {
+            return new Response(406, 'Not acceptible request');
         }
+        $productEntity = $this->getProductsService()->createProduct($data['sku'], $data['name']);
+        $value = $this->getExchangeRatesService()->getValue($data['price']['value'], $data['price']['currency']);
+        $this->getPricesService()->createPrice($productEntity, $data['price']['currency'], $value);
+        $this->getDoctrine()->getManager()->clear();
 
-        if($productEntity && $priceEntity) {
-            $this->getDoctrine()->getManager()->clear();
-            
-            return new JsonResponse('OK');
-        }
-
-        return new Response(406, 'Not acceptible request');
+        return new JsonResponse('OK');
     }
 
     /**
@@ -53,19 +47,16 @@ class ProductController extends Controller
      * @param Request $request
      * @return string
      */
-    public function listAction(Request $request): string
+    public function listAction(Request $request)
     {
-        $from = $request->get('from', null);
-        $to = $request->get('to', null);
-        if (null === $from || null === $to) {
-            return new Response('Not enough parameter', 406);
-        }
+        $data = json_decode($request->getContent(), true);
+        $from = empty($data['from']) ? $request->get('from', null) : $data['from'];
+        $to = empty($data['to']) ? $request->get('to', null) : $data['to'];
 
-        return new JsonResponse($this->getAmazonS3Service()->getUrl(
-                $from,
-                $to,
-                $this->getProductsService()->getList($from, $to)
-            ));
-
+        return new Response($this->getAmazonS3Service()->getUrl(
+            $from,
+            $to,
+            $this->getProductsService()->getList($from, $to)
+        ), 200);
     }
 }

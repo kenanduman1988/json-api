@@ -35,14 +35,17 @@ services:
     #         $someArgument: 'some_value'
 
     products:
+        public: true
         class: AppBundle\Service\Products
         arguments: ["@service_container"]
 
     exchange_rates:
+        public: true
         class: AppBundle\Service\ExchangeRates
         arguments: ["@service_container"]
 
     prices:
+        public: true
         class: AppBundle\Service\Prices
         arguments: ["@service_container"]
 

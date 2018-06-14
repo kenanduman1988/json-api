@@ -38,7 +38,7 @@ class AmazonS3
     public function upload( $fileName, $content, array $meta = [], $privacy = 'public-read')
     {
         return $this->getClient()->upload($this->getBucket(), $fileName, $content, $privacy, [
-            'Metadata' => $meta
+            'Metadata' => $meta,
         ])->toArray()['ObjectURL'];
     }
     /**
@@ -121,20 +121,21 @@ class AmazonS3
             'price_eur',
             'created_at',
         ], ';');
-        foreach ($list as $item) {
+        /** @var \AppBundle\Entity\Products $product */
+        foreach ($list as $product) {
             // insert rows
             fputcsv($handle, [
-                $item['sku'],
-                $item['name'],
-                $item['price'],
-                $item['created_at'],
+                $product->getSku(),
+                $product->getName(),
+                '',
+                $product->getCreatedAt()->format('Y-m-d'),
             ], ';');
         }
         fclose($handle);
 
         $url =  $this->uploadFile(
             $tmpFile,
-            sprintf( 'products_%s_%s', $from, $to)
+            sprintf( 'products_%s_%s.csv', $from, $to)
         );
         $fileSystem->remove($tmpFile);
 
