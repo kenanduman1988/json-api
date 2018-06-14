@@ -48,6 +48,5 @@ class Products
         ;
 
         return $qb->getResult() ?? [];
-
     }
 }

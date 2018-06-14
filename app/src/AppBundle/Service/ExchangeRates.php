@@ -12,6 +12,11 @@ class ExchangeRates
 {
     use ContainerTrait;
 
+    /**
+     * @param float $value
+     * @param string $currency
+     * @return float
+     */
     public function getValue(float $value, string $currency): float
     {
         if (\AppBundle\Model\Products::DEFAULT_CURRENCY !== $currency) {

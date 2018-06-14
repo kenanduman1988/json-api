@@ -2,14 +2,9 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Prices;
-use AppBundle\Entity\Products;
 use AppBundle\Traits\ServiceTrait;
-use Doctrine\Common\Persistence\ObjectManager;
-use Proxies\__CG__\AppBundle\Entity\ExchangeRates;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

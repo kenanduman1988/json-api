@@ -32,3 +32,4 @@ class Prices
         return $priceEntity;
     }
 }
+

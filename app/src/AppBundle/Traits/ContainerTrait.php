@@ -2,7 +2,10 @@
 
 namespace AppBundle\Traits;
 
-
+/**
+ * Trait ContainerTrait
+ * @package AppBundle\Traits
+ */
 trait ContainerTrait
 {
     use ServiceTrait;
