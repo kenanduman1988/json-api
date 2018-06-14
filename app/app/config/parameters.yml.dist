@@ -19,5 +19,5 @@ parameters:
     secret: ThisTokenIsNotSoSecretChangeIt
 
 
-    amazon_key: AKIAISPSNSSG37X26M5A
-    amazon_secret: 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
+    amazon_key: ~
+    amazon_secret: ~
