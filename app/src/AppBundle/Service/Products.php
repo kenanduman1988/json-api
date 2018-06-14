@@ -38,6 +38,7 @@ class Products
      */
     public function getList(string $from, string $to): array
     {
+        // TODO: join to prices table
         $qb = $this->getDoctrine()->getEntityManager()->createQuery("
             SELECT p 
               FROM AppBundle:Products p

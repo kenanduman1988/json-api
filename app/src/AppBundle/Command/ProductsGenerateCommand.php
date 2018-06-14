@@ -25,6 +25,7 @@ class ProductsGenerateCommand extends ContainerAwareCommand
     {
         $productService = $this->getContainer()->get('products');
         $priceService = $this->getContainer()->get('prices');
+        //TODO: insert price
         for ($i=1;$i<=100;$i++) {
             $product = $productService->createProduct("Test {$i}", 'Test ' . md5($i));
         }

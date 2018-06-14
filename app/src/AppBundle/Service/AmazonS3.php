@@ -127,6 +127,7 @@ class AmazonS3
             fputcsv($handle, [
                 $product->getSku(),
                 $product->getName(),
+                // TODO: get price
                 '',
                 $product->getCreatedAt()->format('Y-m-d'),
             ], ';');
